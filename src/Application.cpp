@@ -131,16 +131,12 @@ int main(void)
         2, 3, 0
     };
 
-    unsigned int vao;
-    GLCall(glGenVertexArrays(1, &vao));
-    GLCall(glBindVertexArray(vao));
-
-    VertexArray va;
+    VertexArray* va = new VertexArray();
     VertexBuffer* vb = new VertexBuffer(positions, 2 * 4 * sizeof(float));
 
     VertexBufferLayout layout;
     layout.Push<float>(2);
-    va.AddBuffer(*vb, layout);
+    va->AddBuffer(*vb, layout);
 
     //GLCall(glEnableVertexAttribArray(0));
     //GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
@@ -157,7 +153,7 @@ int main(void)
     ASSERT(location != -1);
     GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
-    GLCall(glBindVertexArray(0));
+    va->Unbind();
     GLCall(glUseProgram(0));
     
     float r = 0.05f;
@@ -174,7 +170,7 @@ int main(void)
 		GLCall(glUniform4f(location, r, 0.0f, 0.0f, 1.0f));
 
 		//GLCall(glBindVertexArray(vao));
-        va.Bind();
+        va->Bind();
         ib->Bind();
 
         GLCall(glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr));
@@ -195,6 +191,7 @@ int main(void)
     }
 
     glDeleteProgram(shader);
+    delete va;
     delete vb;
     delete ib;
     glfwTerminate();
