@@ -8,6 +8,7 @@
 
 #include "Renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertextArray.h"
 #include "Shader.h"
@@ -76,6 +77,8 @@ int main(void)
     vb->Unbind();
     ib->Unbind();
     shader->Unbind();
+
+    Renderer renderer;
     
     float r = 0.00f;
     float increment = 0.05f;
@@ -85,13 +88,12 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        renderer.Clear();
 
         shader->Bind();
-        std::cout << r << std::endl;
+        shader->setUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);
 
-        va->Bind();
-        ib->Bind();
+        renderer.Draw(*va, *ib, *shader);
 
         GLCall(glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr));
 
