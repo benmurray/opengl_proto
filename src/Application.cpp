@@ -224,6 +224,19 @@ void glfw_OnKey(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+
+    static bool m_ShowLines = false;
+
+    if (key == GLFW_KEY_F1 && action == GLFW_PRESS)
+        if (m_ShowLines)
+        {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            m_ShowLines = false;
+        }
+        else {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            m_ShowLines = true;
+        }
 }
 
 void glfw_OnFrameBufferSize(GLFWwindow* window, int width, int height)
